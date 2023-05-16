@@ -222,6 +222,9 @@ namespace DotNet18_Test1_Milos_Stojic.DAO
                 Console.WriteLine("Uspesno promenjen staus vozila {0} {1} ",vo.id,vo.registracija);
             }
             else
+            {
+                Console.WriteLine("Status vozila nije promenjen.");
+            }
             return;
         }
 

@@ -99,6 +99,28 @@ namespace DotNet18_Test1_Milos_Stojic.DAO
             Console.WriteLine();
         }
 
+
+        public static void VoziloIspisiSvaZauzeta()
+        {
+            List<Voznja> sveVoznje = DAOVoznja.PreuzmiVoznjuIzSql();
+            Console.WriteLine("\tSva vozila :");
+
+            foreach (Voznja v in sveVoznje)
+            {
+                if (v.zavrsenDN == "N")
+                {
+                    Vozilo vo = DAOVozilo.VoziloPreuzmiPoId(v.id_vozila);
+                    Console.WriteLine(" Vozilo sa ID : {0}  registracija vozila : {1} je zauzeto ", vo.id, vo.registracija);
+                }
+                else
+                {
+                    continue;
+                }
+            }
+
+            Console.WriteLine();
+        }
+
         public static Vozilo PreuzmiVoziloAkoPostoji()
         {
             Vozilo pronadji = null;
@@ -158,6 +180,44 @@ namespace DotNet18_Test1_Milos_Stojic.DAO
                 if (pronadji == null)
                 {
                     Console.WriteLine("Nepostojece vozilo ili vozilo nije slobodno\n");
+                }
+            }
+
+            return pronadji;
+        }
+
+        public static Vozilo PreuzmiVoziloAkoJeZauzeto()
+        {
+            Vozilo pronadji = null;
+            int userInput;
+            Console.Clear();
+            Console.WriteLine("Izaberi jedno od zauzetih vozila vozila :");
+            DAOVozilo.VoziloIspisiSvaZauzeta();
+            Console.WriteLine("Unesite id vozila :");
+            string unetiTekst = Console.ReadLine();
+            if (int.TryParse(unetiTekst, out userInput) == false)
+            {
+                Console.WriteLine("Id nije integer");
+            }
+            else
+            {
+
+                userInput = int.Parse(unetiTekst);
+                List<Voznja> zauzeto = DAOVoznja.PreuzmiVoznjuZauzetaVozilaIzSql();
+
+                foreach (Voznja v in zauzeto)
+                {
+                    if (v.id_vozila == userInput)
+                    {
+                        pronadji = VoziloPreuzmiPoId(userInput);
+                    }
+
+                }
+
+
+                if (pronadji == null)
+                {
+                    Console.WriteLine("Nepostojece vozilo ili vozilo nije zauzeto\n");
                 }
             }
 

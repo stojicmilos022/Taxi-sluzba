@@ -20,6 +20,7 @@ namespace DotNet18_Test1_Milos_Stojic
                 Console.WriteLine("\t1. Unos nove adrese u sistem :");
                 Console.WriteLine("\t2. Pregled svih voznji sa dodeljenim adresama i voznjama:");
                 Console.WriteLine("\t3. Kreiranje nove voznje :");
+                Console.WriteLine("\t4. Zavrsi voznju  :");
 
 
                 Console.WriteLine("\t0. Izlaz iz programa...");
@@ -41,7 +42,9 @@ namespace DotNet18_Test1_Milos_Stojic
                     case 3:
                         DAOVoznja.VoznjaKreirajNovuSaUnosom();
                         break;
-
+                    case 4:
+                        DAOVoznja.VoznjaPromenaStatusa();
+                        break;
 
                     default:
                         Console.WriteLine("Nepoznata komanda");

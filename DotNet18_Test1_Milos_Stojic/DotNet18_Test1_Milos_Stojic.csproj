@@ -54,6 +54,9 @@
     <Compile Include="Model\Voznja.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\AdresaUI.cs" />
+    <Compile Include="UI\VoziloUI.cs" />
+    <Compile Include="UI\VoznjaUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

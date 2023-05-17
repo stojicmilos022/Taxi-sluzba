@@ -1,5 +1,6 @@
 ﻿using DotNet18_Test1_Milos_Stojic.DAO;
 using DotNet18_Test1_Milos_Stojic.Model;
+using DotNet18_Test1_Milos_Stojic.UI;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -145,7 +146,7 @@ namespace DotNet18_Test1_Milos_Stojic.Help
             Adresa pronadji = null;
             int userInput;
             Console.Clear();
-            DAOAdresa.AdresaIspisiSve();
+            AdresaUI.AdresaIspisiSve();
             Console.WriteLine("Unesite id adrese :");
             string unetiTekst = Console.ReadLine();
             if (int.TryParse(unetiTekst, out userInput) == false)

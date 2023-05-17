@@ -67,161 +67,31 @@ namespace DotNet18_Test1_Milos_Stojic.DAO
             return voziloPreuzmi;
         }
 
-        public static void VoziloIspisiSve()
+        
+        public static Vozilo PreuzmiVoziloAkoJeSlobodnoAuto()
         {
-            List<Vozilo> svaVozila = DAOVozilo.PreuzmiVoziloIzSql();
-            Console.WriteLine("\tSva vozila :");
-            foreach (Vozilo v in svaVozila)
+            SqlConnection connection = DaoConnection.NewConnection();
+
+            //List<Voznja> sveVoznje = new List<Voznja>();
+
+            Vozilo vozilo = null;
+            string sQuerry = "select top (1) id,registracija from Vozilo where id not in (select id_vozilo from voznja where zavrsenaDN=\'N\')";
+
+            SqlCommand cmd = new SqlCommand(sQuerry, connection);
+
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            while (rdr.Read())
             {
-                Console.WriteLine(v);
+                int id = (int)rdr["Id"];
+                string registracija = (string)rdr["registracija"];
+
+
+                vozilo = new Vozilo(id, registracija);
             }
-            Console.WriteLine();
-        }
-
-        public static void VoziloIspisiSvaDostupna()
-        {
-            List<Voznja> sveVoznje = DAOVoznja.PreuzmiVoznjuIzSql();
-            Console.WriteLine("\tSva vozila :");
-            
-            foreach (Voznja v in sveVoznje)
-            {
-                if(v.zavrsenDN=="D")
-                {
-                    Vozilo vo = DAOVozilo.VoziloPreuzmiPoId(v.id_vozila);
-                    Console.WriteLine(" Vozilo sa ID : {0}  registracija vozila : {1} je dostupno ",vo.id,vo.registracija);
-                }
-                else 
-                {
-                    continue;
-                }
-            }
-           
-            Console.WriteLine();
-        }
-
-
-        public static void VoziloIspisiSvaZauzeta()
-        {
-            List<Voznja> sveVoznje = DAOVoznja.PreuzmiVoznjuIzSql();
-            Console.WriteLine("\tSva vozila :");
-
-            foreach (Voznja v in sveVoznje)
-            {
-                if (v.zavrsenDN == "N")
-                {
-                    Vozilo vo = DAOVozilo.VoziloPreuzmiPoId(v.id_vozila);
-                    Console.WriteLine(" Vozilo sa ID : {0}  registracija vozila : {1} je zauzeto ", vo.id, vo.registracija);
-                }
-                else
-                {
-                    continue;
-                }
-            }
-
-            Console.WriteLine();
-        }
-
-        public static Vozilo PreuzmiVoziloAkoPostoji()
-        {
-            Vozilo pronadji = null;
-            int userInput;
-            Console.Clear();
-            DAOVozilo.VoziloIspisiSve();
-            Console.WriteLine("Unesite id vozila :");
-            string unetiTekst = Console.ReadLine();
-            if (int.TryParse(unetiTekst, out userInput) == false)
-            {
-                Console.WriteLine("Id nije integer");
-            }
-            else
-            {
-                userInput = int.Parse(unetiTekst);
-
-                pronadji = VoziloPreuzmiPoId(userInput);
-
-                if (pronadji == null)
-                {
-                    Console.WriteLine("Nepostojece vozilo");
-                }
-            }
-
-            return pronadji;
-        }
-
-        public static Vozilo PreuzmiVoziloAkoJeSlobodno()
-        {
-            Vozilo pronadji = null;
-            int userInput;
-            Console.Clear();
-            Console.WriteLine("Izaberi jedno od dostupnih vozila :");
-            DAOVozilo.VoziloIspisiSvaDostupna();
-            Console.WriteLine("Unesite id vozila :");
-            string unetiTekst = Console.ReadLine();
-            if (int.TryParse(unetiTekst, out userInput) == false)
-            {
-                Console.WriteLine("Id nije integer");
-            }
-            else
-            {
-               
-                userInput = int.Parse(unetiTekst);
-                List<Voznja> slobodno = DAOVoznja.PreuzmiVoznjuSlobodnaVozilaIzSql();
-
-                foreach(Voznja v in slobodno)
-                {
-                    if (v.id_vozila == userInput)
-                    {
-                        pronadji = VoziloPreuzmiPoId(userInput);
-                    }
-
-                }
-                              
-
-                if (pronadji == null)
-                {
-                    Console.WriteLine("Nepostojece vozilo ili vozilo nije slobodno\n");
-                }
-            }
-
-            return pronadji;
-        }
-
-        public static Vozilo PreuzmiVoziloAkoJeZauzeto()
-        {
-            Vozilo pronadji = null;
-            int userInput;
-            Console.Clear();
-            Console.WriteLine("Izaberi jedno od zauzetih vozila vozila :");
-            DAOVozilo.VoziloIspisiSvaZauzeta();
-            Console.WriteLine("Unesite id vozila :");
-            string unetiTekst = Console.ReadLine();
-            if (int.TryParse(unetiTekst, out userInput) == false)
-            {
-                Console.WriteLine("Id nije integer");
-            }
-            else
-            {
-
-                userInput = int.Parse(unetiTekst);
-                List<Voznja> zauzeto = DAOVoznja.PreuzmiVoznjuZauzetaVozilaIzSql();
-
-                foreach (Voznja v in zauzeto)
-                {
-                    if (v.id_vozila == userInput)
-                    {
-                        pronadji = VoziloPreuzmiPoId(userInput);
-                    }
-
-                }
-
-
-                if (pronadji == null)
-                {
-                    Console.WriteLine("Nepostojece vozilo ili vozilo nije zauzeto\n");
-                }
-            }
-
-            return pronadji;
+            rdr.Close();
+            connection.Close();
+            return vozilo;
         }
     }
 }
